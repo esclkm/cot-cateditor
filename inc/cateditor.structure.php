@@ -65,7 +65,7 @@ class structure
 		{
 			return $this->nav[$mt_curr[1]];
 		}
-		return last_exist_parent($mt_curr[1]);
+		return $this->last_exist_parent($mt_curr[1]);
 	}
 	public function get_parent($category)
 	{
@@ -106,9 +106,11 @@ class structure
 	
 	public function build_tree($parent = null, $depth = 0, $tpl = 'cateditor.tree' , $selectedid = null)
 	{
+		
 		$array = array();
 		$array = (empty($parent)) ? $this->childs_null : $this->childs[$parent];
 		
+		$is_module =cot_module_active($this->area);
 		if(!empty($parent))
 		{
 	//		cot_print($parent, );
@@ -126,6 +128,8 @@ class structure
 				$t->assign(array(
 					'ADMIN_STRUCTURE_EDIT_URL' => cot_url('admin', 'm=other&p=cateditor&n='.$this->area.'&id='.$row['structure_id']),
 					'ADMIN_STRUCTURE_AJAX_EDIT_URL' => cot_url('index', 'r=cateditor&n='.$this->area.'&id='.$row['structure_id']),
+					'ADMIN_STRUCTURE_RIGHTS_URL' => $is_module ? cot_url('admin', 'm=rightsbyitem&ic='.$this->area.'&io='.$row['structure_code']) : '',
+					'ADMIN_STRUCTURE_OPEN_URL' => cot_url($n, 'c='.$row['structure_code']),
 					'ADMIN_STRUCTURE_ID' => $row['structure_id'],
 					'ADMIN_STRUCTURE_CODE' => $row['structure_code'],
 					'ADMIN_STRUCTURE_TITLE' => $row['structure_title'],
